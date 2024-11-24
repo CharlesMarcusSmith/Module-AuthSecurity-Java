@@ -3,13 +3,34 @@
     <head>
         <title>Validation Exercise</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <style>
+            .error {color: red;}
+        </style>
     </head>
     <body style="margin: 2rem; font: 14px Lucida Grande, Helvetica, Arial, sans-serif;">
         <h1>Validation Exercise</h1>
-        <form action="#" th:action="@{/phone-number}" th:object="${phoneNumber}" method="post">
+        <form action="#" th:action="@{/phone-number}" th:object="${phoneNumber}" method="post" id="phoneForm">
             <label for="phone">Phone number:</label>
-            <input type="text" id="phone" th:field="*{phone}" />
-            <input type="submit" value="Submit" />
+            <input type="text" id="phone" th:field="*{phone}" oninput="validatePhoneNumber()" />
+            <span id="error-message" class="error"></span><br><br>
+            <input type="submit" value="Submit" id="submitButton" disabled />
         </form>
+        <script>
+            // Function to validate phone number and enable/disable the submit button
+            function validatePhoneNumber() {
+                var phoneInput = document.getElementById("phone").value;
+                var submitButton = document.getElementById("submitButton");
+                var errorMessage = document.getElementById("error-message");
+                errorMessage.textContent = "";
+                var phoneRegex = /^[+]?[0-9]{10,15}$/;
+
+                if (!phoneRegex.test(phoneInput)) {
+                    errorMessage.textContent = "Please enter a valid phone number (e.g., 07123456789).";
+                    submitButton.disabled = true;
+                } else {
+                    submitButton.disabled = false;
+                }
+            }
+        </script>
     </body>
 </html>
